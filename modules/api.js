@@ -12,22 +12,6 @@ export var ranks;
 export var ships;
 // et cetera
 
-export async function fetchAll() {
-    // This will run them all in parallel, which is faster.
-    let res = await Promise.all([
-        fetchOfficerData(),
-        fetchShipData(),
-        fetchAwardData(),
-        fetchAwardRecordData(),
-        fetchRankData(),
-    ])
-
-    // Other files can use this to figure out whether the data is here yet.
-    initialized = true;
-
-    return res;
-}
-
 export async function fetchOfficerData() {
     officers = await fetchFromApi(Config.TSNCOR_OFFICERS_URL);
     return officers;

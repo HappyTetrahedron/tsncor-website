@@ -1,12 +1,74 @@
 <head>
     <title>
-        The New And Improved TSN Central Officer Records
+        The New TSN Central Officer Records
     </title>
     <script type="module" src="main.js"></script>
 </head>
 <body>
     <p>
-        "hi!"
+        Styling is a thing which I will do later.
     </p>
-    <div id="main"></div>
+    <div v-scope id="main-content">
+        <div id="officers" class="tab-pane">
+            <div id="officer-search" class="tab-sidebar">
+                <input v-model="officerSearch" />
+                <input type="checkbox" v-model="showInactive" />
+                <ul>
+                    <li v-for="officer in filteredOfficers">
+                        <a @click="selectOfficer(officer.name)">
+                            {{ officer.rank }} {{ officer.name }}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div id="officer-display"class="tab-content">
+                <div v-if="selectedOfficerObject">
+                    <div id="basicData">
+                        <p>{{selectedOfficerObject.rank}} {{ selectedOfficerObject.name }}</p>
+                        <p>Enlistment date: {{ formatDate(selectedOfficerObject.ct) }}</p>
+                        <p>Primary expertise: {{ selectedOfficerObject.primary_expertise }}</p>
+                        <p>Secondary expertise: {{ selectedOfficerObject.secondary_expertise }}</p>
+                        <p>Current assignment: <a @click="selectShip(selectedOfficerObject.current_assignment)">{{ selectedOfficerObject.current_assignment }}</a></p>
+                    </div>
+                    <div id="promotions">
+                        <p v-for="rank in sortedRanks">
+                            {{ rank.name }}: {{ formatDate(selectedOfficerObject[rank.shortcode.toLowerCase()]) }}
+                        </p>
+                    </div>
+                    <div id="awards">
+                        <p v-for="award in selectedOfficerObject.awards">
+                            {{ award.award }} ({{ award.notes }})
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="ships" class="tab-pane">
+            <div id="ship-search" class="tab-sidebar">
+                <ul>
+                    <li v-for="ship in ships">
+                        <a @click="selectShip(ship.name)">
+                            TSN {{ ship.name }}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div id="ship-display"class="tab-content">
+                <div v-if="selectedShipObject">
+                    <div id="basicData">
+                        <p>TSN {{selectedShipObject.name}} ({{ selectedShipObject.registry }}) </p>
+                        <p>Class: {{ selectedShipObject.class }}</p>
+                    </div>
+                    <div id="crew">
+                        <p>Assigned officers:</p>
+                        <p v-for="officer in selectedShipObject.assigned_officers">
+                            <a @click="selectOfficer(officer.name)">
+                                {{ officer.rank }} {{ officer.name }}
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>

@@ -1,10 +1,8 @@
-import * as Api from "./modules/api.js"
-import * as Data from "./modules/data.js"
-import * as Render from "./modules/render.js"
+import * as Store from "./modules/store.js"
+import {createApp} from "https://unpkg.com/petite-vue@0.3.0/dist/petite-vue.es.js"
 
-await Api.fetchAll();
-console.log(Data.getOfficerRecordByName("Joy Tetra"));
-console.log(Data.getShipByName("Sabre"));
-
-Render.renderOfficerList();
-
+let app = createApp(
+    Store.store
+)
+app.mount()
+Store.store.init();
