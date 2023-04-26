@@ -3,11 +3,13 @@
         The New TSN Central Officer Records
     </title>
     <script type="module" src="main.js"></script>
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
     <p>
         Styling is a thing which I will do later.
     </p>
+    <!-- The v-scope directive causes this entire div to be managed by petite-vue. This makes the templating work, as well as enabling a bunch of other similar directives like v-for, v-model, etc. -->
     <div v-scope id="main-content">
         <div id="officers" class="tab-pane">
             <div id="officer-search" class="tab-sidebar">
@@ -37,7 +39,7 @@
                     </div>
                     <div id="awards">
                         <p v-for="award in selectedOfficerObject.awards">
-                            {{ award.award }} ({{ award.notes }})
+                            {{ award.award }} ({{ award.notes }}) <img :src="getAwardImageByPath(award.image_file_path)" />
                         </p>
                     </div>
                 </div>

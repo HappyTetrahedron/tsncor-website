@@ -1,5 +1,9 @@
 /**
- * This module contains functions that filter, transform, combine or otherwise wrangle the spreadsheet data into submission.
+ * This module contains a reactive store.
+ * The store contains functions that expose, filter, transform, combine or otherwise wrangle the spreadsheet data into submission.
+ * The store functions can be used in the website where the data is then displayed.
+ * The advantage of using a reactive store: If the data changes, the website is updated automatically!
+ * For this to work, data must always be modified through store functions. So, `store.updateOfficers(newValue)` instead of `store.officers = newValue`.
  */
 
 import * as Api from "./api.js"
@@ -11,6 +15,7 @@ export const store = reactive({
     awards: [],
     awardsRecords: [],
     ranks: [],
+    awardImages: {},
 
     officerSearch: "",
     showInactive: false,
@@ -54,7 +59,9 @@ export const store = reactive({
     updateRanks(ranks) {
         this.ranks = ranks;
     },
-
+    updateAwardImages(awardImages) {
+        this.awardImages = awardImages;
+    },
 
     selectOfficer(officerName) {
         this.selectedOfficer = officerName;
@@ -62,6 +69,18 @@ export const store = reactive({
 
     selectShip(shipName) {
         this.selectedShip = shipName;
+    },
+
+    getAwardImageByPath(path) {
+        if (path === undefined) {
+            return "assets/noimage.png";
+        }
+        let correctedPath = Object.keys(this.awardImages).find(k => k.toLowerCase() === path.toLowerCase())
+        let id = this.awardImages[correctedPath]
+        if (id === undefined) {
+            return "assets/noimage.png"
+        }
+        return `https://drive.google.com/uc?export=view&id=${id}`
     },
 
     getOfficerRecordByName(name) {
@@ -84,7 +103,9 @@ export const store = reactive({
             }
             return newRecord;
         })
-        records = records.filter(aw => Object.keys(aw).length !== 0);
+        records = records
+            .filter(aw => Object.keys(aw).length !== 0)
+            .sort((a, b) => (a.precedence < b.precedence) ? 1 : (a.precedence === b.precedence) ? 0 : -1)
         return records;
     },
 
@@ -134,9 +155,10 @@ export const store = reactive({
         Promise.all([
             Api.fetchOfficerData().then(o => this.updateOfficers(o)),
             Api.fetchShipData().then(s => this.updateShips(s)),
-            Api.fetchAwardData().then(a => this.updateAwards(a)), 
+            Api.fetchAwardData().then(a => this.updateAwards(a)),
             Api.fetchAwardRecordData().then(a => this.updateAwardsRecords(a)), 
             Api.fetchRankData().then(r => this.updateRanks(r)), 
+            Api.fetchAwardImages().then(r => this.updateAwardImages(r)),
         ])
     }
 })
