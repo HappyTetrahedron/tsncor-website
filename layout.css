@@ -22,7 +22,7 @@
 
 
 /* Ribbon rack */
-.ribbon-info-wrapper {
+.ribbon-info-outer-wrapper {
     position: relative;
     top: -10px;
     left: -100px;
@@ -32,24 +32,30 @@
     display: none;
 }
 
+.ribbon:hover .ribbon-info-outer-wrapper {
+    display: block;
+}
+
+.ribbon-info-inner-wrapper {
+    width: 400;
+    pointer-events: none;
+}
+
+.ribbon-info {
+    background: #d6d6be;
+    width: auto;
+    display: inline-block;
+    pointer-events: none;
+}
+
 .ribbon {
     float: left;
     height: 30px;
 }
 
-.ribbon:hover .ribbon-info-wrapper {
-    display: block;
-}
-
 .ribbon-image {
     width: 100px;
     height: 30px;
-}
-
-.ribbon-info {
-    background: #d6d6be;
-    max-width: 300px;
-    min-width: 100px;
 }
 
 #ribbonrack {

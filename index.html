@@ -64,14 +64,17 @@
                         <div id="ribbonrack">
                             <div class="ribbon" v-for="award in selectedOfficerObject.awards">
                                 <img class="ribbon-image" :src="getAwardImageByPath(award.image_file_path)" />
-                                <div class="ribbon-info-wrapper">
-                                    <div class="ribbon-info">
-                                        <p class="ribbon-title">
-                                            {{ award.title }}
-                                        </p>
-                                        <p v-for="record in award.records" class="ribbon-notes">
-                                            {{ formatDate(record.date) }}: {{ record.notes }}
-                                        </p>
+                                <!-- It's the good ol' triple nested overflow fuckery trick. Trust me, they're all needed. -->
+                                <div class="ribbon-info-outer-wrapper">
+                                    <div class="ribbon-info-inner-wrapper">
+                                        <div class="ribbon-info">
+                                            <p class="ribbon-title">
+                                                {{ award.title }}
+                                            </p>
+                                            <p v-for="record in award.records" class="ribbon-notes">
+                                                {{ formatDate(record.date) }}: {{ record.notes }}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
