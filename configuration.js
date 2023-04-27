@@ -14,3 +14,18 @@ export const TSNCOR_STARDATES_URL = `${TSNCOR_DEPLOYMENT_WEB_APP_URL}?sheet=star
 export const TSNCOR_QUALIFICATIONS_URL = `${TSNCOR_DEPLOYMENT_WEB_APP_URL}?sheet=qualifications`
 export const TSNCOR_QUALIFICATIONS_RECORDS_URL = `${TSNCOR_DEPLOYMENT_WEB_APP_URL}?sheet=qualificationrecords`
 export const TSNCOR_IMAGES_URL = `${TSNCOR_DEPLOYMENT_WEB_APP_URL}?images`
+
+// Time, in milliseconds, for which records that rarely update are cached.
+// These records are basically everything except officers.
+// Users can always force a full refresh via the refresh button on the website.
+export const LONG_CACHE_DURATION = 1000 * 60 * 60 * 24 * 7; // 1 week
+
+// Time, in milliseconds, for which records that update more frequently are cached.
+// This is currently just the officer records.
+// Users can always force a full refresh via the refresh button on the website.
+export const SHORT_CACHE_DURATION = 1000 * 60 * 60; // 1 hour
+
+// Image file which is displayed in the ribbon rack when the actual image is missing.
+// To fix missing image files, make sure the image is in the correct google drive folder
+// and the path is correctly added to the list of Awards in the COR spreadsheet.
+export const RIBBON_MISSING_FILE = "assets/noimage.png";

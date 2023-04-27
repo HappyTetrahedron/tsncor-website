@@ -1,3 +1,60 @@
-img {
-    width: 70px;
+/* Content alignment */
+.tab-content, .tab-pane {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.tab-content-wrapper {
+    width: calc(100vw - 280px);
+}
+
+.tab-sidebar {
+    width: 250px;
+}
+
+.content-title {
+    width: 100%;
+}
+
+/* Texts etc */
+
+
+/* Ribbon rack */
+.ribbon-info-wrapper {
+    position: relative;
+    top: -10px;
+    left: -100px;
+    width: 0;
+    height:0;
+    overflow: visible;
+    display: none;
+}
+
+.ribbon-info {
+    background: #d6d6be;
+    width: 200px;
+}
+
+.ribbon {
+    float: left;
+    height: 28px;
+}
+
+.ribbon:hover .ribbon-info-wrapper {
+    display: block;
+}
+
+.ribbon-image {
+    width: 100px;
+    height: 28px;
+}
+
+#ribbonrack {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    width: 300px;
+    flex-wrap: wrap;
 }

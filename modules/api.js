@@ -1,54 +1,52 @@
 /**
  * This module contains functions to retrieve data from the TSNCOR spreadsheet (which acts kind of like an API).
- * It is eventually also supposed to do local caching, but that's not in yet.
+ * It also caches the results in local browser storage.
  */
 import * as Config from "../configuration.js"
 
-// TODO: caching.
-var officers;
-var awards;
-var awardsRecords;
-var ranks;
-var ships;
-var awardImages;
+const cache = await caches.open("tsncor");
 
 export async function fetchOfficerData() {
-    officers = await fetchFromApi(Config.TSNCOR_OFFICERS_URL);
+    let officers = await fetchWithCache(Config.TSNCOR_OFFICERS_URL, Config.SHORT_CACHE_DURATION);
     return officers;
 }
 
 export async function fetchShipData() {
-    ships = await fetchFromApi(Config.TSNCOR_SHIPS_URL);
+    let ships = await fetchWithCache(Config.TSNCOR_SHIPS_URL, Config.LONG_CACHE_DURATION);
     return ships;
 }
 
 export async function fetchAwardData() {
-    awards = await fetchFromApi(Config.TSNCOR_AWARDS_URL);
+    let awards = await fetchWithCache(Config.TSNCOR_AWARDS_URL, Config.LONG_CACHE_DURATION);
     return awards;
 }
 
 export async function fetchAwardRecordData() {
-    awardsRecords = await fetchFromApi(Config.TSNCOR_AWARDS_RECORDS_URL);
+    let awardsRecords = await fetchWithCache(Config.TSNCOR_AWARDS_RECORDS_URL, Config.LONG_CACHE_DURATION);
     return awardsRecords;
 }
 
 export async function fetchRankData() {
-    ranks = await fetchFromApi(Config.TSNCOR_RANKS_URL);
+    let ranks = await fetchWithCache(Config.TSNCOR_RANKS_URL, Config.LONG_CACHE_DURATION);
     return ranks;
 }
 
 export async function fetchAwardImages() {
-    awardImages = await fetchFromApi(Config.TSNCOR_IMAGES_URL)
+    let awardImages = await fetchWithCache(Config.TSNCOR_IMAGES_URL, Config.LONG_CACHE_DURATION)
     return awardImages;
 }
 
-async function fetchFromApi(url) {
-    let res = await fetch(
-        url,
-        {
-            redirect: "follow", // Apps Script serves the result with a redirect so this is required
-            cache: "force-cache" // Force the browser to cache the result, since it shouldn't change often
-        }
-    )
+export async function resetCache() {
+    localStorage.clear();
+}
+
+async function fetchWithCache(url, cacheDuration) {
+    let lastCached = localStorage.getItem(url)
+    if (lastCached < Date.now() - cacheDuration) {
+        let res = await fetch(url, {redirect: "follow"})
+        await cache.put(url, res);
+        localStorage.setItem(url, Date.now())
+    }
+    let res = await cache.match(url);
     return await res.json()
 }

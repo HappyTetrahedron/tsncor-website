@@ -7,6 +7,7 @@
  */
 
 import * as Api from "./api.js"
+import * as Config from "../configuration.js"
 import {reactive} from "https://unpkg.com/petite-vue@0.3.0/dist/petite-vue.es.js"
 
 export const store = reactive({
@@ -17,11 +18,15 @@ export const store = reactive({
     ranks: [],
     awardImages: {},
 
+    refreshing: false,
+
     officerSearch: "",
     showInactive: false,
 
     selectedOfficer: "",
     selectedShip: "",
+
+    displayTab: "officers",
 
     get filteredOfficers() {
         let ol = this.officers
@@ -65,20 +70,22 @@ export const store = reactive({
 
     selectOfficer(officerName) {
         this.selectedOfficer = officerName;
+        this.displayTab = "officers";
     },
 
     selectShip(shipName) {
         this.selectedShip = shipName;
+        this.displayTab = "ships";
     },
 
     getAwardImageByPath(path) {
         if (path === undefined) {
-            return "assets/noimage.png";
+            return Config.RIBBON_MISSING_FILE;
         }
         let correctedPath = Object.keys(this.awardImages).find(k => k.toLowerCase() === path.toLowerCase())
         let id = this.awardImages[correctedPath]
         if (id === undefined) {
-            return "assets/noimage.png"
+            return Config.RIBBON_MISSING_FILE;
         }
         return `https://drive.google.com/uc?export=view&id=${id}`
     },
@@ -93,20 +100,34 @@ export const store = reactive({
     },
 
     getAwardsForOfficer(officerName) {
-        let records = this.awardsRecords.filter(elem => elem.officer == officerName)
-        records = records.map(award => {
-            let awardData = this.awards.find(aw => aw.title == award.award);
-            let newRecord = {};
-            if (awardData) {
-                Object.keys(award).forEach(k => newRecord[k] = award[k])
-                Object.keys(awardData).forEach(k => newRecord[k] = awardData[k])
-            }
-            return newRecord;
-        })
-        records = records
-            .filter(aw => Object.keys(aw).length !== 0)
-            .sort((a, b) => (a.precedence < b.precedence) ? 1 : (a.precedence === b.precedence) ? 0 : -1)
-        return records;
+        let records = this.awardsRecords.filter(elem => elem.officer == officerName);
+        let awardNames = records.map(r => r.award);
+
+        // One award may have been given multiple times. So we find each award that has been given at least once,
+        // and then we attach all records pertaining to that award as a child to the award object.
+        let relevantAwards = this.awards.filter(aw => awardNames.includes(aw.title));
+        relevantAwards = relevantAwards.map(award => {
+            let newAward = award;
+            newAward.records = records.filter(r => r.award == award.title)
+            return newAward
+        });
+
+        // Now we need to filter out all service ribbons except the highest.
+        let serviceRibbons = relevantAwards.filter(aw => aw.title.startsWith("Service Ribbon "));
+        if (serviceRibbons.length != 0) {
+            let highestRibbon = serviceRibbons.sort((a, b) => {
+                // remove the first 15 characters (the word "Service Ribbon" and turn the rest into a number)
+                let anr = parseInt(a.title.slice(15));
+                let bnr = parseInt(b.title.slice(15));
+                // if A has the lower number it should be later in the list (as highest should be first), so return 1 then
+                return anr < bnr ? 1 : anr == bnr ? 0 : -1
+            })[0]
+            relevantAwards = relevantAwards.filter(aw => !aw.title.startsWith("Service Ribbon"))
+            relevantAwards.push(highestRibbon)
+        }
+
+        // Finally, sort awards by precedence in descending order
+        return relevantAwards.sort((a, b) => (a.precedence < b.precedence) ? 1 : (a.precedence === b.precedence) ? 0 : -1)
     },
 
     getShipByName(name) {
@@ -120,6 +141,10 @@ export const store = reactive({
 
     getOfficersForShip(shipName) {
         return this.officers.filter(elem => elem.current_assignment == shipName);
+    },
+
+    getShortRank(longRank) {
+        return this.ranks.find(r => r.name == longRank)?.abbreviation;
     },
 
     formatDate(dateString) {
@@ -150,6 +175,12 @@ export const store = reactive({
         return 0;
     },
 
+    refreshData() {
+        this.refreshing = true;
+        Api.resetCache();
+        this.init();
+    },
+
     init() {
         // This will run them all in parallel, which is faster.
         Promise.all([
@@ -160,6 +191,9 @@ export const store = reactive({
             Api.fetchRankData().then(r => this.updateRanks(r)), 
             Api.fetchAwardImages().then(r => this.updateAwardImages(r)),
         ])
+            .then(() => {
+                this.refreshing = false;
+            })
     }
 })
 

@@ -11,41 +11,76 @@
     </p>
     <!-- The v-scope directive causes this entire div to be managed by petite-vue. This makes the templating work, as well as enabling a bunch of other similar directives like v-for, v-model, etc. -->
     <div v-scope id="main-content">
-        <div id="officers" class="tab-pane">
+        <button @click="refreshData">Refresh</button>
+        <p v-if="refreshing">Refreshing...</p>
+        <div v-if="displayTab == 'officers'" id="officers" class="tab-pane">
             <div id="officer-search" class="tab-sidebar">
                 <input v-model="officerSearch" />
                 <input type="checkbox" v-model="showInactive" />
                 <ul>
                     <li v-for="officer in filteredOfficers">
                         <a @click="selectOfficer(officer.name)">
-                            {{ officer.rank }} {{ officer.name }}
+                            {{ getShortRank(officer.rank) }} {{ officer.name }}
                         </a>
                     </li>
                 </ul>
             </div>
-            <div id="officer-display"class="tab-content">
-                <div v-if="selectedOfficerObject">
+            <div class="tab-content-wrapper">
+                <div v-if="selectedOfficerObject" id="officer-display" class="tab-content">
+                    <div class="content-title">
+                        <h3 class="section-title officer-name">{{selectedOfficerObject.rank}} {{ selectedOfficerObject.name }}</h3>
+                    </div>
                     <div id="basicData">
-                        <p>{{selectedOfficerObject.rank}} {{ selectedOfficerObject.name }}</p>
-                        <p>Enlistment date: {{ formatDate(selectedOfficerObject.ct) }}</p>
-                        <p>Primary expertise: {{ selectedOfficerObject.primary_expertise }}</p>
-                        <p>Secondary expertise: {{ selectedOfficerObject.secondary_expertise }}</p>
-                        <p>Current assignment: <a @click="selectShip(selectedOfficerObject.current_assignment)">{{ selectedOfficerObject.current_assignment }}</a></p>
+                        <table class="info-table officer-info">
+                            <tr>
+                                <td class="info-title">Enlistment date:</td>
+                                <td>{{ formatDate(selectedOfficerObject.ct) }}</td>
+                            </tr>
+                            <tr>
+                                <td class="info-title">Primary expertise:</td>
+                                <td>{{ selectedOfficerObject.primary_expertise }}</td>
+                            </tr>
+                            <tr>
+                                <td class="info-title">Secondary expertise:</td>
+                                <td>{{ selectedOfficerObject.secondary_expertise }}</td>
+                            </tr>
+                            <tr>
+                                <td class="info-title">Current assignment:</td>
+                                <td>
+                                    <a class="internal-link" @click="selectShip(selectedOfficerObject.current_assignment)">{{ selectedOfficerObject.current_assignment }}</a>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                     <div id="promotions">
-                        <p v-for="rank in sortedRanks">
-                            {{ rank.name }}: {{ formatDate(selectedOfficerObject[rank.shortcode.toLowerCase()]) }}
-                        </p>
+                        <table>
+                            <tr v-for="rank in sortedRanks" class="info-entry">
+                                <td class="info-title">{{ rank.name }}:</td>
+                                <td>{{ formatDate(selectedOfficerObject[rank.shortcode.toLowerCase()]) }}</td>
+                            </tr>
+                        </table>
                     </div>
                     <div id="awards">
-                        <p v-for="award in selectedOfficerObject.awards">
-                            {{ award.award }} ({{ award.notes }}) <img :src="getAwardImageByPath(award.image_file_path)" />
-                        </p>
+                        <div id="ribbonrack">
+                            <div class="ribbon" v-for="award in selectedOfficerObject.awards">
+                                <img class="ribbon-image" :src="getAwardImageByPath(award.image_file_path)" />
+                                <div class="ribbon-info-wrapper">
+                                    <div class="ribbon-info">
+                                        <p class="ribbon-title">
+                                            {{ award.title }}
+                                        </p>
+                                        <p v-for="record in award.records" class="ribbon-notes">
+                                            {{ formatDate(record.date) }}: {{ record.notes }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div id="ships" class="tab-pane">
+        <div v-if="displayTab == 'ships'" id="ships" class="tab-pane">
             <div id="ship-search" class="tab-sidebar">
                 <ul>
                     <li v-for="ship in ships">
@@ -55,19 +90,40 @@
                     </li>
                 </ul>
             </div>
-            <div id="ship-display"class="tab-content">
-                <div v-if="selectedShipObject">
+            <div class="tab-content-wrapper">
+                <div v-if="selectedShipObject" id="ship-display" class="tab-content">
+                    <div class="content-title">
+                        <h3 class="ship-name section-title">TSN {{selectedShipObject.name}} ({{ selectedShipObject.registry }}) </h3>
+                    </div>
                     <div id="basicData">
-                        <p>TSN {{selectedShipObject.name}} ({{ selectedShipObject.registry }}) </p>
-                        <p>Class: {{ selectedShipObject.class }}</p>
+                        <table class="info-table ship-info">
+                            <tr>
+                                <td class="info-title">Registry:</td>
+                                <td>{{ selectedShipObject.registry }}</td>
+                            </tr>
+                            <tr>
+                                <td class="info-title">Class:</td>
+                                <td>{{ selectedShipObject.class }}</td>
+                            </tr>
+                            <tr>
+                                <td class="info-title">Status:</td>
+                                <td>{{ selectedShipObject.status }}</td>
+                            </tr>
+                            <tr>
+                                <td class="info-title">Notes:</td>
+                                <td>{{ selectedShipObject.notes }}</td>
+                            </tr>
+                        </table>
                     </div>
                     <div id="crew">
-                        <p>Assigned officers:</p>
-                        <p v-for="officer in selectedShipObject.assigned_officers">
-                            <a @click="selectOfficer(officer.name)">
-                                {{ officer.rank }} {{ officer.name }}
-                            </a>
-                        </p>
+                        <h4>Assigned officers:</h4>
+                        <ul class="crew-list">
+                            <li class="crew-entry" v-for="officer in selectedShipObject.assigned_officers">
+                                <a class="internal-link" @click="selectOfficer(officer.name)">
+                                    {{ officer.rank }} {{ officer.name }}
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
