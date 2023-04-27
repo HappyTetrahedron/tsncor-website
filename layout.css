@@ -32,14 +32,9 @@
     display: none;
 }
 
-.ribbon-info {
-    background: #d6d6be;
-    width: 200px;
-}
-
 .ribbon {
     float: left;
-    height: 28px;
+    height: 30px;
 }
 
 .ribbon:hover .ribbon-info-wrapper {
@@ -48,7 +43,13 @@
 
 .ribbon-image {
     width: 100px;
-    height: 28px;
+    height: 30px;
+}
+
+.ribbon-info {
+    background: #d6d6be;
+    max-width: 300px;
+    min-width: 100px;
 }
 
 #ribbonrack {
@@ -58,3 +59,5 @@
     width: 300px;
     flex-wrap: wrap;
 }
+
+/* Ribbon info content*/

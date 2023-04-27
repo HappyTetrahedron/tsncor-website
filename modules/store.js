@@ -82,6 +82,10 @@ export const store = reactive({
         if (path === undefined) {
             return Config.RIBBON_MISSING_FILE;
         }
+        if (Object.keys(this.awardImages).length === 0) {
+            // Award images data has not yet been loaded
+            return Config.RIBBON_LOADING_FILE;
+        }
         let correctedPath = Object.keys(this.awardImages).find(k => k.toLowerCase() === path.toLowerCase())
         let id = this.awardImages[correctedPath]
         if (id === undefined) {
@@ -112,19 +116,9 @@ export const store = reactive({
             return newAward
         });
 
-        // Now we need to filter out all service ribbons except the highest.
-        let serviceRibbons = relevantAwards.filter(aw => aw.title.startsWith("Service Ribbon "));
-        if (serviceRibbons.length != 0) {
-            let highestRibbon = serviceRibbons.sort((a, b) => {
-                // remove the first 15 characters (the word "Service Ribbon" and turn the rest into a number)
-                let anr = parseInt(a.title.slice(15));
-                let bnr = parseInt(b.title.slice(15));
-                // if A has the lower number it should be later in the list (as highest should be first), so return 1 then
-                return anr < bnr ? 1 : anr == bnr ? 0 : -1
-            })[0]
-            relevantAwards = relevantAwards.filter(aw => !aw.title.startsWith("Service Ribbon"))
-            relevantAwards.push(highestRibbon)
-        }
+        // Some ribbons are cumulative, and we only really want the highest.
+        relevantAwards = collateRibbonsToHighest(relevantAwards, "Service Ribbon")
+        relevantAwards = collateRibbonsToHighest(relevantAwards, "Purple Heart")
 
         // Finally, sort awards by precedence in descending order
         return relevantAwards.sort((a, b) => (a.precedence < b.precedence) ? 1 : (a.precedence === b.precedence) ? 0 : -1)
@@ -197,3 +191,32 @@ export const store = reactive({
     }
 })
 
+
+/**
+ * Given a list of awards (ribbons) and a prefix (such as "Service Ribbon"),
+ * this takes all the ribbons with this prefix out of the list
+ * save for the highest.
+ * 
+ * The assumption is that the list contains ribbons called "Service Ribbon 1",
+ * "Service Ribbon 2" etc. and only the highest numbered one is kept.
+ * 
+ * @param {Object[]} ribbons 
+ * @param {string} ribbonPrefix 
+ * @returns 
+ */
+function collateRibbonsToHighest(ribbons, ribbonPrefix) {
+    let relevantRibbons = ribbons.filter(aw => aw.title.startsWith(ribbonPrefix));
+    if (relevantRibbons.length != 0) {
+        let highest = relevantRibbons.sort((a, b) => {
+            // remove the first characters (e.g. the word "Service Ribbon" and turn the rest into a number)
+            let anr = parseInt(a.title.slice(ribbonPrefix.length));
+            let bnr = parseInt(b.title.slice(ribbonPrefix.length));
+            // if A has the lower number it should be later in the list (as highest should be first), so return 1 then
+            return anr < bnr ? 1 : anr == bnr ? 0 : -1
+        })[0]
+        ribbons = ribbons.filter(aw => !aw.title.startsWith(ribbonPrefix));
+        ribbons.push(highest);
+    }
+    return ribbons;
+
+}

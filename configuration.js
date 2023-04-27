@@ -1,7 +1,7 @@
 // This URL refers to a deployment of the AppsScript code which is contained in the TSNCOR spreadsheet.
 // To find that, open the spreadsheet, then go to Extensions --> AppsScript.
 // The code there contains an explanation of how to get/update this URL.
-const TSNCOR_DEPLOYMENT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwmkAU9r6WYZ-ZGgfc0YWMny-I7_J6BoxLf40zHTGsddirZpWFYoJYDJeFtUNtzI4cH/exec"
+const TSNCOR_DEPLOYMENT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzYzPYFZoOWWx3cun0rdj5O_p4pwRdw9F9NSkZue84IsQqqkt2nqCpLV0YHxiVXyNH8/exec"
 
 
 // The path suffices for these URLs are also defined in the AppsScript.
@@ -29,3 +29,5 @@ export const SHORT_CACHE_DURATION = 1000 * 60 * 60; // 1 hour
 // To fix missing image files, make sure the image is in the correct google drive folder
 // and the path is correctly added to the list of Awards in the COR spreadsheet.
 export const RIBBON_MISSING_FILE = "assets/noimage.png";
+// Image file which is displayed in the ribbon rack when the actual image is still loading.
+export const RIBBON_LOADING_FILE = "assets/loading.gif";

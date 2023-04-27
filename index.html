@@ -3,7 +3,7 @@
         The New TSN Central Officer Records
     </title>
     <script type="module" src="main.js"></script>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="layout.css" />
 </head>
 <body>
     <p>
@@ -47,7 +47,7 @@
                             <tr>
                                 <td class="info-title">Current assignment:</td>
                                 <td>
-                                    <a class="internal-link" @click="selectShip(selectedOfficerObject.current_assignment)">{{ selectedOfficerObject.current_assignment }}</a>
+                                    <a class="internal-link" @click="selectShip(selectedOfficerObject.current_assignment)">TSN {{ selectedOfficerObject.current_assignment }}</a>
                                 </td>
                             </tr>
                         </table>
