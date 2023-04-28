@@ -31,6 +31,11 @@ export async function fetchRankData() {
     return ranks;
 }
 
+export async function fetchStardateData() {
+    let stardates = await fetchWithCache(Config.TSNCOR_STARDATES_URL, Config.LONG_CACHE_DURATION);
+    return stardates;
+}
+
 export async function fetchAwardImages() {
     let awardImages = await fetchWithCache(Config.TSNCOR_IMAGES_URL, Config.LONG_CACHE_DURATION)
     return awardImages;

@@ -66,7 +66,7 @@
                     <div id="promotions">
                         <table>
                             <tr v-for="rank in sortedRanks" class="info-entry">
-                                <td>
+                                <td v-if="officerHasRank(selectedOfficerObject, rank)">
                                     <p class="info-title">{{ rank.name }}:</p>
                                     <p>{{ formatDate(selectedOfficerObject[rank.shortcode.toLowerCase()]) }}</p>
                                 </td>

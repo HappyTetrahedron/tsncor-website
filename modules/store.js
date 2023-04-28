@@ -16,6 +16,7 @@ export const store = reactive({
     awards: [],
     awardsRecords: [],
     ranks: [],
+    stardates: [],
     awardImages: {},
 
     refreshing: false,
@@ -65,6 +66,9 @@ export const store = reactive({
     },
     updateRanks(ranks) {
         this.ranks = ranks;
+    },
+    updateStardates(stardates) {
+        this.stardates = stardates;
     },
     updateAwardImages(awardImages) {
         this.awardImages = awardImages;
@@ -153,10 +157,29 @@ export const store = reactive({
 
     formatDate(dateString) {
         var date = new Date(dateString);
-        if (isNaN(date)) {
-            return dateString;
+        if (isNaN(date)) { // this means it wasn't a valid date. Happens sometimes when people put "???" into the spreadsheet.
+            return dateString; // In that case, leave it as-is.
         }
-        return date.getDate()+1+ "/" + (date.getMonth()+1)+ "/" +(date.getFullYear()-2000);
+        // JavaScript months are 0-based, meaning January is month 0, so we add 1 to the month.
+        return `${date.getDate()}${(date.getMonth()+1)}${(date.getFullYear()-2000)}-${this.getStarYearForDate(date)}`;
+    },
+
+    getStarYearForDate(date) {
+        if (this.stardates.length === 0) {
+            // Stardates not ready yet :(
+            return "????";
+        }
+        let filteredStardates = this.stardates
+            .filter(sd => new Date(sd.start_date_irl) < date) // get only dates that are before our reference date
+            .sort((a, b) => a.stardate_year < b.stardate_year ? 1 : a.stardate_year === b.stardate_year ? 0 : -1); // sort highest first
+
+        return filteredStardates[0].stardate_year; // get the first (highest) and return it
+    },
+
+    officerHasRank(officer, rank) {
+        // The !! is a common trick to turn any value into a boolean based on its inherent truthiness.
+        return !!officer[rank.shortcode.toLowerCase()];
+
     },
 
     /**
@@ -199,6 +222,7 @@ export const store = reactive({
             Api.fetchAwardData().then(a => this.updateAwards(a)),
             Api.fetchAwardRecordData().then(a => this.updateAwardsRecords(a)), 
             Api.fetchRankData().then(r => this.updateRanks(r)), 
+            Api.fetchStardateData().then(r => this.updateStardates(r)),
             Api.fetchAwardImages().then(r => this.updateAwardImages(r)),
         ])
             .then(() => {
