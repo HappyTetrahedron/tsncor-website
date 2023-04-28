@@ -22,9 +22,11 @@ export const store = reactive({
 
     officerSearch: "",
     showInactive: false,
+    officersLoading: true,
 
     selectedOfficer: "",
     selectedShip: "",
+    shipsLoading: true,
 
     displayTab: "officers",
 
@@ -68,14 +70,22 @@ export const store = reactive({
         this.awardImages = awardImages;
     },
 
+    showOfficers() {
+        this.displayTab = "officers";
+    },
+
+    showShips() {
+        this.displayTab = "ships";
+    },
+
     selectOfficer(officerName) {
         this.selectedOfficer = officerName;
-        this.displayTab = "officers";
+        this.showOfficers();
     },
 
     selectShip(shipName) {
         this.selectedShip = shipName;
-        this.displayTab = "ships";
+        this.showShips();
     },
 
     getAwardImageByPath(path) {
@@ -171,6 +181,8 @@ export const store = reactive({
 
     refreshData() {
         this.refreshing = true;
+        this.officersLoading = true;
+        this.shipsLoading = true;
         Api.resetCache();
         this.init();
     },
@@ -178,8 +190,12 @@ export const store = reactive({
     init() {
         // This will run them all in parallel, which is faster.
         Promise.all([
-            Api.fetchOfficerData().then(o => this.updateOfficers(o)),
-            Api.fetchShipData().then(s => this.updateShips(s)),
+            Api.fetchOfficerData()
+                .then(o => this.updateOfficers(o))
+                .then(() => {this.officersLoading = false}),
+            Api.fetchShipData()
+                .then(s => this.updateShips(s))
+                .then(() => {this.shipsLoading = false}),
             Api.fetchAwardData().then(a => this.updateAwards(a)),
             Api.fetchAwardRecordData().then(a => this.updateAwardsRecords(a)), 
             Api.fetchRankData().then(r => this.updateRanks(r)), 

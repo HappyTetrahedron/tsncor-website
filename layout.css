@@ -1,5 +1,5 @@
 /* Content alignment */
-.tab-content, .tab-pane {
+.tab-pane {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
@@ -8,6 +8,7 @@
 
 .tab-content-wrapper {
     width: calc(100vw - 280px);
+    min-width: 250px;
 }
 
 .tab-sidebar {
@@ -24,8 +25,6 @@
 /* Ribbon rack */
 .ribbon-info-outer-wrapper {
     position: relative;
-    top: -10px;
-    left: -100px;
     width: 0;
     height:0;
     overflow: visible;
@@ -37,7 +36,7 @@
 }
 
 .ribbon-info-inner-wrapper {
-    width: 400;
+    width: 400px;
     pointer-events: none;
 }
 
@@ -46,6 +45,7 @@
     width: auto;
     display: inline-block;
     pointer-events: none;
+    transform: translate(calc(50px - 100%),-10px);
 }
 
 .ribbon {

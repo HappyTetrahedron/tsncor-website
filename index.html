@@ -12,11 +12,14 @@
     <!-- The v-scope directive causes this entire div to be managed by petite-vue. This makes the templating work, as well as enabling a bunch of other similar directives like v-for, v-model, etc. -->
     <div v-scope id="main-content">
         <button @click="refreshData">Refresh</button>
-        <p v-if="refreshing">Refreshing...</p>
+        <button @click="showOfficers">Officers</button>
+        <button @click="showShips">Ships</button>
+        <p v-if="officersLoading">Refreshing...</p>
         <div v-if="displayTab == 'officers'" id="officers" class="tab-pane">
             <div id="officer-search" class="tab-sidebar">
-                <input v-model="officerSearch" />
-                <input type="checkbox" v-model="showInactive" />
+                <p v-if="filteredOfficers.length === 0">Loading...</p>
+                <input v-model="officerSearch" /><br />
+                <input type="checkbox" v-model="showInactive" /><label>Show inactive</label>
                 <ul>
                     <li v-for="officer in filteredOfficers">
                         <a @click="selectOfficer(officer.name)">
@@ -33,21 +36,29 @@
                     <div id="basicData">
                         <table class="info-table officer-info">
                             <tr>
-                                <td class="info-title">Enlistment date:</td>
-                                <td>{{ formatDate(selectedOfficerObject.ct) }}</td>
-                            </tr>
-                            <tr>
-                                <td class="info-title">Primary expertise:</td>
-                                <td>{{ selectedOfficerObject.primary_expertise }}</td>
-                            </tr>
-                            <tr>
-                                <td class="info-title">Secondary expertise:</td>
-                                <td>{{ selectedOfficerObject.secondary_expertise }}</td>
-                            </tr>
-                            <tr>
-                                <td class="info-title">Current assignment:</td>
                                 <td>
-                                    <a class="internal-link" @click="selectShip(selectedOfficerObject.current_assignment)">TSN {{ selectedOfficerObject.current_assignment }}</a>
+                                    <p class="info-title">Enlistment date:</p>
+                                    <p>{{ formatDate(selectedOfficerObject.ct) }}</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <p class="info-title">Primary expertise:</p>
+                                    <p>{{ selectedOfficerObject.primary_expertise }}</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <p class="info-title">Secondary expertise:</p>
+                                    <p>{{ selectedOfficerObject.secondary_expertise }}</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <p class="info-title">Current assignment:</p>
+                                    <p>
+                                        <a class="internal-link" @click="selectShip(selectedOfficerObject.current_assignment)">TSN {{ selectedOfficerObject.current_assignment }}</a>
+                                    </p>
                                 </td>
                             </tr>
                         </table>
@@ -55,8 +66,10 @@
                     <div id="promotions">
                         <table>
                             <tr v-for="rank in sortedRanks" class="info-entry">
-                                <td class="info-title">{{ rank.name }}:</td>
-                                <td>{{ formatDate(selectedOfficerObject[rank.shortcode.toLowerCase()]) }}</td>
+                                <td>
+                                    <p class="info-title">{{ rank.name }}:</p>
+                                    <p>{{ formatDate(selectedOfficerObject[rank.shortcode.toLowerCase()]) }}</p>
+                                </td>
                             </tr>
                         </table>
                     </div>
@@ -85,6 +98,7 @@
         </div>
         <div v-if="displayTab == 'ships'" id="ships" class="tab-pane">
             <div id="ship-search" class="tab-sidebar">
+                <p v-if="shipsLoading">Loading...</p>
                 <ul>
                     <li v-for="ship in ships">
                         <a @click="selectShip(ship.name)">
@@ -101,20 +115,28 @@
                     <div id="basicData">
                         <table class="info-table ship-info">
                             <tr>
-                                <td class="info-title">Registry:</td>
-                                <td>{{ selectedShipObject.registry }}</td>
+                                <td>
+                                    <p class="info-title">Registry:</p>
+                                    <p>{{ selectedShipObject.registry }}</p>
+                                </td>
                             </tr>
                             <tr>
-                                <td class="info-title">Class:</td>
-                                <td>{{ selectedShipObject.class }}</td>
+                                <td>
+                                    <p class="info-title">Class:</p>
+                                    <p>{{ selectedShipObject.class }}</p>
+                                </td>
                             </tr>
                             <tr>
-                                <td class="info-title">Status:</td>
-                                <td>{{ selectedShipObject.status }}</td>
+                                <td>
+                                    <p class="info-title">Status:</p>
+                                    <p>{{ selectedShipObject.status }}</p>
+                                </td>
                             </tr>
                             <tr>
-                                <td class="info-title">Notes:</td>
-                                <td>{{ selectedShipObject.notes }}</td>
+                                <td>
+                                    <p class="info-title">Notes:</p>
+                                    <p>{{ selectedShipObject.notes }}</p>
+                                </td>
                             </tr>
                         </table>
                     </div>
