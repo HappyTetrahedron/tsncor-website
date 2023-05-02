@@ -42,6 +42,9 @@
 .ribbon-info-inner-wrapper {
     width: 400px;
     pointer-events: none;
+    transform: translate(-350px, calc(-10px - 100%));
+    display: flex;
+    justify-content: flex-end;
 }
 
 .ribbon-info {
@@ -49,7 +52,6 @@
     width: auto;
     display: inline-block;
     pointer-events: none;
-    transform: translate(calc(50px - 100%), calc(-10px - 100%));
 }
 
 .ribbon {
@@ -68,4 +70,5 @@
     flex-direction: row;
     width: 300px;
     flex-wrap: wrap;
+    overflow: visible;
 }

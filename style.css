@@ -1,0 +1,29 @@
+/* This stylesheet is used for styling things.
+   It defines what things look like, but not where they are. */
+
+/* General styling */
+body {
+    font-family: sans-serif;
+}
+
+/* Table entries */
+
+table.info-table {
+    width: 100%;
+}
+
+.info-table td {
+    border-bottom: 2px solid #c5dbde;
+    padding-bottom: 0.5em;
+}
+
+.info-table p {
+    margin-top: 0;
+}
+
+.info-table p.info-title {
+    color: #74cacf;
+    font-size: 0.7em;
+    margin-bottom: 0.3em;
+    padding-bottom: 0;
+}

@@ -4,6 +4,7 @@
     </title>
     <script type="module" src="main.js"></script>
     <link rel="stylesheet" href="layout.css" />
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
     <p>
@@ -31,7 +32,7 @@
             <div class="tab-content-wrapper">
                 <div v-if="selectedOfficerObject" id="officer-display" class="tab-content">
                     <div class="content-title">
-                        <h3 class="section-title officer-name">{{selectedOfficerObject.rank}} {{ selectedOfficerObject.name }}</h3>
+                        <h2 class="section-title officer-name">{{selectedOfficerObject.rank}} {{ selectedOfficerObject.name }}</h2>
                     </div>
                     <div id="basicData">
                         <table class="info-table officer-info">
@@ -64,7 +65,8 @@
                         </table>
                     </div>
                     <div id="promotions">
-                        <table>
+                        <h3 class="section-title">Promotions</h3>
+                        <table class="info-table rank-info">
                             <tr v-for="rank in sortedRanks" class="info-entry">
                                 <td v-if="officerHasRank(selectedOfficerObject, rank)">
                                     <p class="info-title">{{ rank.name }}:</p>
@@ -74,6 +76,7 @@
                         </table>
                     </div>
                     <div id="awards">
+                        <h3 class="section-title">Ribbon Rack</h3>
                         <div id="ribbonrack">
                             <div class="ribbon" v-for="award in selectedOfficerObject.awards">
                                 <img class="ribbon-image" :src="getAwardImageByPath(award.image_file_path)" />
@@ -110,7 +113,7 @@
             <div class="tab-content-wrapper">
                 <div v-if="selectedShipObject" id="ship-display" class="tab-content">
                     <div class="content-title">
-                        <h3 class="ship-name section-title">TSN {{selectedShipObject.name}} ({{ selectedShipObject.registry }}) </h3>
+                        <h2 class="ship-name section-title">TSN {{selectedShipObject.name}} ({{ selectedShipObject.registry }}) </h2>
                     </div>
                     <div id="basicData">
                         <table class="info-table ship-info">
