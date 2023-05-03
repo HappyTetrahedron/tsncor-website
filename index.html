@@ -7,20 +7,21 @@
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <p>
-        Styling is work in progress.
-    </p>
     <!-- The v-scope directive causes this entire div to be managed by petite-vue. This makes the templating work, as well as enabling a bunch of other similar directives like v-for, v-model, etc. -->
     <div v-scope id="main-content">
-        <button @click="refreshData">Refresh</button>
-        <button @click="showOfficers">Officers</button>
-        <button @click="showShips">Ships</button>
-        <p v-if="officersLoading">Refreshing...</p>
+        <button class="tab" :class="{ active: displayTab == 'officers'}" @click="showOfficers">Officers</button>
+        <button class="tab" :class="{ active: displayTab == 'ships'}" @click="showShips">Ships</button>
         <div v-if="displayTab == 'officers'" id="officers" class="tab-pane">
             <div id="officer-search" class="tab-sidebar">
-                <p v-if="filteredOfficers.length === 0">Loading...</p>
-                <input v-model="officerSearch" /><br />
-                <input type="checkbox" v-model="showInactive" /><label>Show inactive</label>
+                <div class="search">
+                    <input class="search" v-model="officerSearch" />
+                    <div class="small-option">
+                        <input class="small-option" type="checkbox" v-model="showInactive" /><label class="small-option">Show inactive</label>
+                    </div>
+                </div>
+                <div class="loading" v-if="filteredOfficers.length === 0">
+                    <img class="loading" src="assets/loading.gif" />
+                </div>
                 <ul>
                     <li v-for="officer in filteredOfficers">
                         <a @click="selectOfficer(officer.name)">
@@ -28,6 +29,7 @@
                         </a>
                     </li>
                 </ul>
+                <button @click="refreshData">Refresh</button>
             </div>
             <div class="tab-content-wrapper">
                 <div v-if="selectedOfficerObject" id="officer-display" class="tab-content">
@@ -57,8 +59,11 @@
                             <tr>
                                 <td>
                                     <p class="info-title">Current assignment:</p>
-                                    <p>
+                                    <p v-if="selectedOfficerObject.current_assignment !== ''">
                                         <a class="internal-link" @click="selectShip(selectedOfficerObject.current_assignment)">TSN {{ selectedOfficerObject.current_assignment }}</a>
+                                    </p>
+                                    <p v-if="selectedOfficerObject.current_assignment == ''">
+                                        unassigned
                                     </p>
                                 </td>
                             </tr>
@@ -106,7 +111,9 @@
         </div>
         <div v-if="displayTab == 'ships'" id="ships" class="tab-pane">
             <div id="ship-search" class="tab-sidebar">
-                <p v-if="shipsLoading">Loading...</p>
+                <div v-if="shipsLoading">
+                    <img src="assets/loading.gif" />
+                </div>
                 <ul>
                     <li v-for="ship in ships">
                         <a @click="selectShip(ship.name)">
@@ -114,6 +121,7 @@
                         </a>
                     </li>
                 </ul>
+                <button @click="refreshData">Refresh</button>
             </div>
             <div class="tab-content-wrapper">
                 <div v-if="selectedShipObject" id="ship-display" class="tab-content">
@@ -143,7 +151,9 @@
                             <tr>
                                 <td>
                                     <p class="info-title">Notes:</p>
-                                    <p>{{ selectedShipObject.notes }}</p>
+                                    <div class="long-property-text">
+                                        <p>{{ selectedShipObject.notes }}</p>
+                                    </div>
                                 </td>
                             </tr>
                         </table>

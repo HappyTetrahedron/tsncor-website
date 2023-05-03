@@ -8,6 +8,8 @@
     --accent-color-light: #c5dbde;
     --accent-color-dark: #579598;
 
+    --main-background-color: white;
+
     --dark-gray: #444444;
     --light-gray: #eaeaea;
 }
@@ -15,6 +17,37 @@
 /* General styling */
 body {
     font-family: sans-serif;
+    background: url(assets/noise.png) repeat, var(--accent-color-dark);
+}
+
+div#main-content {
+    max-width: 1000px;
+    margin: auto;
+}
+
+div.tab-pane {
+    background-color: var(--main-background-color);
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-bottom: 2em;
+    border-radius: 0 5px 5px 5px;
+}
+
+/* Tabs */
+
+button.tab {
+    padding: 1em;
+    border-radius: 5px 5px 0 0;
+    background-color: var(--light-gray);
+    border-style: none;
+}
+
+button.tab.active {
+    background-color: var(--main-background-color);
+} 
+
+button.tab:hover {
+    background-color: var(--accent-color-light);
 }
 
 /* Links */
@@ -25,6 +58,30 @@ a:hover {
 a {
     color: var(--accent-color);
     cursor: pointer;
+}
+
+/* Search bar */
+
+div.search {
+    padding-top: 1em;
+}
+
+input.small-option {
+    transform: scale(0.7);
+}
+
+.small-option {
+    font-size: small;
+}
+
+/* Loading indicator */
+
+div.loading {
+    padding-top: 1em;
+}
+
+img.loading {
+    width: 100px;
 }
 
 /* Entry list */
@@ -51,6 +108,17 @@ table.info-table {
 
 .info-table p {
     margin-top: 0;
+}
+
+div.long-property-text {
+    display: flex;
+    width: 100%;
+    text-align: justify;
+}
+
+.long-property-text p {
+    width: 250px;
+    flex-grow: 1;
 }
 
 .info-table p.info-title {
