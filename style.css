@@ -23,6 +23,7 @@ body {
 div#main-content {
     max-width: 1000px;
     margin: auto;
+    margin-top: 3em;
 }
 
 div.tab-pane {
