@@ -8,7 +8,7 @@
 </head>
 <body>
     <p>
-        Styling is a thing which I will do later.
+        Styling is work in progress.
     </p>
     <!-- The v-scope directive causes this entire div to be managed by petite-vue. This makes the templating work, as well as enabling a bunch of other similar directives like v-for, v-model, etc. -->
     <div v-scope id="main-content">
@@ -88,7 +88,12 @@
                                                 {{ award.title }}
                                             </p>
                                             <p v-for="record in award.records" class="ribbon-notes">
-                                                {{ formatDate(record.date) }}: {{ record.notes }}
+                                                <span v-if="record.notes != ''">
+                                                    {{ formatDate(record.date) }}: {{ record.notes }}
+                                                </span>
+                                                <span v-if="record.notes == ''">
+                                                    {{ formatDate(record.date) }}: {{ award.type }} awarded.
+                                                </span>
                                             </p>
                                         </div>
                                     </div>

@@ -1,19 +1,51 @@
 /* This stylesheet is used for styling things.
    It defines what things look like, but not where they are. */
 
+/* Color definitions */
+
+:root {
+    --accent-color: #74cacf;
+    --accent-color-light: #c5dbde;
+    --accent-color-dark: #579598;
+
+    --dark-gray: #444444;
+    --light-gray: #eaeaea;
+}
+
 /* General styling */
 body {
     font-family: sans-serif;
 }
 
-/* Table entries */
+/* Links */
+a:hover {
+    color: var(--accent-color-dark);
+}
+
+a {
+    color: var(--accent-color);
+    cursor: pointer;
+}
+
+/* Entry list */
+
+.tab-sidebar ul {
+    padding-left: 0;
+}
+
+.tab-sidebar li {
+    list-style-type: none;
+    margin-bottom: 0.2em;
+}
+
+/* Info entries */
 
 table.info-table {
     width: 100%;
 }
 
 .info-table td {
-    border-bottom: 2px solid #c5dbde;
+    border-bottom: 2px solid var(--accent-color-light);
     padding-bottom: 0.5em;
 }
 
@@ -22,8 +54,26 @@ table.info-table {
 }
 
 .info-table p.info-title {
-    color: #74cacf;
+    color: var(--accent-color);
     font-size: 0.7em;
     margin-bottom: 0.3em;
     padding-bottom: 0;
+}
+
+/* Ribbon rack */
+
+.ribbon-info {
+    padding: 1em;
+    border-radius: 10px 10px 0 10px;
+    background: var(--light-gray);
+}
+
+p.ribbon-title {
+    color: var(--accent-color);
+}
+
+p.ribbon-notes {
+    font-size: small;
+    color: var(--dark-gray);
+    text-align: justify;
 }
