@@ -7,10 +7,16 @@
  */
 
 import * as Api from "./api.js"
+import * as Router from "./router.js"
 import * as Config from "../configuration.js"
 import {reactive} from "https://unpkg.com/petite-vue@0.3.0/dist/petite-vue.es.js"
 
 export const store = reactive({
+    availableTabs: [
+        "ships",
+        "officers",
+    ],
+
     officers: [],
     ships: [],
     awards: [],
@@ -30,6 +36,25 @@ export const store = reactive({
     shipsLoading: true,
 
     displayTab: "officers",
+
+    get selectedEntry() {
+        if (this.displayTab == "ships") {
+            return this.selectedShip
+        }
+        if (this.displayTab == "officers") {
+            return this.selectedOfficer
+        }
+    },
+
+    set selectedEntry(newEntry) {
+        if (this.displayTab == "ships") {
+            this.selectedShip = newEntry;
+        }
+        if (this.displayTab == "officers") {
+            this.selectedOfficer = newEntry;
+        }
+
+    },
 
     get filteredOfficers() {
         let ol = this.officers
@@ -85,11 +110,13 @@ export const store = reactive({
     selectOfficer(officerName) {
         this.selectedOfficer = officerName;
         this.showOfficers();
+        Router.setQueryFromStore(this);
     },
 
     selectShip(shipName) {
         this.selectedShip = shipName;
         this.showShips();
+        Router.setQueryFromStore(this);
     },
 
     getAwardImageByPath(path) {

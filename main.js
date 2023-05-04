@@ -1,4 +1,5 @@
 import * as Store from "./modules/store.js"
+import * as Router from "./modules/router.js"
 /**
  * This site uses petite-vue for lightweight reactive components. (don't worry, those are just buzzwords)
  * It's a library that greatly simplifies the process of displaying data in the website.
@@ -10,5 +11,8 @@ import {createApp} from "https://unpkg.com/petite-vue@0.3.0/dist/petite-vue.es.j
 let app = createApp(
     Store.store
 )
-app.mount()
+app.mount();
 Store.store.init();
+Router.setStoreFromQuery(Store.store, window.location.search);
+
+addEventListener("popstate", (event) => {Router.setStoreFromQuery(Store.store, event.state)})
