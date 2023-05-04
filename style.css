@@ -4,9 +4,10 @@
 /* Color definitions */
 
 :root {
-    --accent-color: #74cacf;
+    /* --accent-color: #74cacf; */
+    --accent-color: #579598;
     --accent-color-light: #c5dbde;
-    --accent-color-dark: #579598;
+    --accent-color-dark: #2b4f56;
 
     --main-background-color: white;
 
@@ -17,7 +18,7 @@
 /* General styling */
 body {
     font-family: sans-serif;
-    background: url(assets/noise.png) repeat, var(--accent-color-dark);
+    background: url(assets/noise.png) repeat, var(--accent-color);
 }
 
 div#main-content {
@@ -73,6 +74,8 @@ input.small-option {
 
 .small-option {
     font-size: small;
+    display: flex;
+    align-items: center;
 }
 
 /* Loading indicator */
@@ -85,13 +88,22 @@ img.loading {
     width: 100px;
 }
 
-/* Entry list */
+/* Empty states */
+.empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    justify-content: center;
+}
 
-.tab-sidebar ul {
+/* Lists */
+
+ul {
     padding-left: 0;
 }
 
-.tab-sidebar li {
+li {
     list-style-type: none;
     margin-bottom: 0.2em;
 }

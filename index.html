@@ -32,6 +32,10 @@
                 <button @click="refreshData">Refresh</button>
             </div>
             <div class="tab-content-wrapper">
+                <div v-if="!selectedOfficerObject" class="empty" id="officer-empty">
+                    <h2>TSN Central Officer Records</h2>
+                    <p>Select an officer to view information</p>
+                </div>
                 <div v-if="selectedOfficerObject" id="officer-display" class="tab-content">
                     <div class="content-title">
                         <h2 class="section-title officer-name">{{selectedOfficerObject.rank}} {{ selectedOfficerObject.name }}</h2>
@@ -124,6 +128,10 @@
                 <button @click="refreshData">Refresh</button>
             </div>
             <div class="tab-content-wrapper">
+                <div v-if="!selectedShipObject" class="empty" id="ship-empty">
+                    <h2>TSN Ship Registry</h2>
+                    <p>Select a ship to view information</p>
+                </div>
                 <div v-if="selectedShipObject" id="ship-display" class="tab-content">
                     <div class="content-title">
                         <h2 class="ship-name section-title">TSN {{selectedShipObject.name}} ({{ selectedShipObject.registry }}) </h2>

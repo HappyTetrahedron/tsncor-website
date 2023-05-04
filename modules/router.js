@@ -11,10 +11,11 @@ export function setQueryFromStore(store) {
 }
 
 export function setStoreFromQuery(store, query) {
-    if (query == "") {
-        // nothing selected, leave everything as-is
+    if (!query || query == "") {
+        store.selectedEntry = "";
         return;
     }
+
     let queries = query.slice(1).split('&'); // remove 1st character (the '?'), then split at every '&'
 
     queries.forEach(q => {
