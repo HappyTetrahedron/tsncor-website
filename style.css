@@ -161,7 +161,27 @@ div.long-property-text {
 
 .ribbon-info {
     padding: 1em;
+    background: var(--light-gray);
+}
+
+.right .ribbon-info {
     border-radius: 10px 10px 0 10px;
+}
+
+.left .ribbon-info {
+    border-radius: 10px 10px 10px 0;
+}
+
+.center .ribbon-info {
+    border-radius: 10px;
+}
+
+.center .below {
+    width: 15px;
+    height: 5px;
+    margin-top:-1px;
+    clip-path:polygon(0 0, 100% 0, 50% 100%);
+    -webkit-clip-path:polygon(0 0, 100% 0, 50% 100%);
     background: var(--light-gray);
 }
 

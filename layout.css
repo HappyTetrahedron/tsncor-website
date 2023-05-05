@@ -38,9 +38,24 @@
 .ribbon-info-inner-wrapper {
     width: 400px;
     pointer-events: none;
-    transform: translate(-350px, calc(-10px - 100%));
     display: flex;
+
+}
+
+.right .ribbon-info-inner-wrapper {
+    transform: translate(-350px, calc(-10px - 100%));
     justify-content: flex-end;
+}
+
+.left .ribbon-info-inner-wrapper {
+    transform: translate(50px, calc(-10px - 100%));
+    justify-content: flex-start;
+}
+
+.center .ribbon-info-inner-wrapper {
+    transform: translate(-150px, calc(-10px - 100%));
+    flex-direction: column;
+    align-items: center;
 }
 
 .ribbon-info {

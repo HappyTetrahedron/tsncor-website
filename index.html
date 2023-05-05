@@ -92,7 +92,15 @@
                     <div id="awards">
                         <h3 class="section-title">Ribbon Rack</h3>
                         <div id="ribbonrack">
-                            <div class="ribbon" v-for="award in selectedOfficerObject.awards">
+                            <div
+                                class="ribbon"
+                                v-for="(award, index) in selectedOfficerObject.awards"
+                                :class="{
+                                    left: index % 3 == 0,
+                                    center: index % 3 == 1,
+                                    right: index % 3 == 2,
+                                }"
+                            >
                                 <img class="ribbon-image" :src="getAwardImageByPath(award.image_file_path)" />
                                 <!-- It's the good ol' triple nested overflow fuckery trick. Trust me, they're all needed. -->
                                 <div class="ribbon-info-outer-wrapper">
@@ -102,12 +110,14 @@
                                                 {{ award.title }}
                                             </p>
                                             <p v-for="record in award.records" class="ribbon-notes">
-                                                    {{ formatDate(record.date) }}
-                                                    <span v-if="award.title !== record.award">({{ record.award }})</span>:
-                                                    <span v-if="record.notes != ''">{{ record.notes }}</span>
-                                                    <span v-if="record.notes == ''">{{ award.type }} awarded</span>
-                                                </span>
+                                                {{ formatDate(record.date) }}
+                                                <span v-if="award.title !== record.award">({{ record.award }})</span>:
+                                                <span v-if="record.notes != ''">{{ record.notes }}</span>
+                                                <span v-if="record.notes == ''">{{ award.type }} awarded</span>
                                             </p>
+                                        </div>
+                                        <div class="below">
+                                            <!-- This is an empty div which we turn into a little arrow using CSS -->
                                         </div>
                                     </div>
                                 </div>
