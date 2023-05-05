@@ -129,8 +129,8 @@
         </div>
         <div v-if="displayTab == 'ships'" id="ships" class="tab-pane">
             <div id="ship-search" class="tab-sidebar">
-                <div v-if="shipsLoading">
-                    <img src="assets/loading.gif" />
+                <div class="loading" v-if="ships.length === 0">
+                    <img class="loading" src="assets/loading.gif" />
                 </div>
                 <ul>
                     <li v-for="ship in ships">
