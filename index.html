@@ -101,11 +101,10 @@
                                                 {{ award.title }}
                                             </p>
                                             <p v-for="record in award.records" class="ribbon-notes">
-                                                <span v-if="record.notes != ''">
-                                                    {{ formatDate(record.date) }}: {{ record.notes }}
-                                                </span>
-                                                <span v-if="record.notes == ''">
-                                                    {{ formatDate(record.date) }}: {{ award.type }} awarded.
+                                                    {{ formatDate(record.date) }}
+                                                    <span v-if="award.title !== record.award">({{ record.award }})</span>:
+                                                    <span v-if="record.notes != ''">{{ record.notes }}</span>
+                                                    <span v-if="record.notes == ''">{{ award.type }} awarded</span>
                                                 </span>
                                             </p>
                                         </div>

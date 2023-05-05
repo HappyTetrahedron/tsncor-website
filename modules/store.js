@@ -152,14 +152,21 @@ export const store = reactive({
         // and then we attach all records pertaining to that award as a child to the award object.
         let relevantAwards = this.awards.filter(aw => awardNames.includes(aw.title));
         relevantAwards = relevantAwards.map(award => {
-            let newAward = award;
-            newAward.records = records.filter(r => r.award == award.title)
-            return newAward
+            let newAward = {...award};
+            newAward.records = records.filter(r => r.award == award.title);
+            return newAward;
         });
 
-        // Some ribbons are cumulative, and we only really want the highest.
-        relevantAwards = collateRibbonsToHighest(relevantAwards, "Service Ribbon")
-        relevantAwards = collateRibbonsToHighest(relevantAwards, "Purple Heart")
+        // Furthermore, some awards form a progression (e.g. 1 year service -> 2 year service -> 3 year service etc.)
+        // We only want to show the latest award of each progression.
+        // First, find all non-empty progressions
+        let progressions = relevantAwards.map(aw => aw.progression).filter(p => p != "")
+        let uniqueProgressions = Array.from(new Set(progressions))
+
+        // Now, for each progression we have got, actually do the collecting
+        uniqueProgressions.forEach(progression => {
+            relevantAwards = collateAwardsToHighest(relevantAwards, progression)
+        });
 
         // Finally, sort awards by precedence in descending order
         return relevantAwards.sort((a, b) => (a.precedence < b.precedence) ? 1 : (a.precedence === b.precedence) ? 0 : -1)
@@ -258,32 +265,35 @@ export const store = reactive({
     }
 })
 
-
 /**
- * Given a list of awards (ribbons) and a prefix (such as "Service Ribbon"),
- * this takes all the ribbons with this prefix out of the list
- * save for the highest.
+ * Given a list of awards and a progression (such as "Service Ribbon"),
+ * this takes all the awards from this progression out of the list
+ * save for the highest/most recent.
  * 
- * The assumption is that the list contains ribbons called "Service Ribbon 1",
- * "Service Ribbon 2" etc. and only the highest numbered one is kept.
- * 
- * @param {Object[]} ribbons 
- * @param {string} ribbonPrefix 
+ * @param {Object[]} awards
+ * @param {string} progression
  * @returns 
  */
-function collateRibbonsToHighest(ribbons, ribbonPrefix) {
-    let relevantRibbons = ribbons.filter(aw => aw.title.startsWith(ribbonPrefix));
-    if (relevantRibbons.length != 0) {
-        let highest = relevantRibbons.sort((a, b) => {
-            // remove the first characters (e.g. the word "Service Ribbon" and turn the rest into a number)
-            let anr = parseInt(a.title.slice(ribbonPrefix.length));
-            let bnr = parseInt(b.title.slice(ribbonPrefix.length));
-            // if A has the lower number it should be later in the list (as highest should be first), so return 1 then
-            return anr < bnr ? 1 : anr == bnr ? 0 : -1
-        })[0]
-        ribbons = ribbons.filter(aw => !aw.title.startsWith(ribbonPrefix));
-        ribbons.push(highest);
-    }
-    return ribbons;
+function collateAwardsToHighest(awards, progression) {
+    // Get all the awards of the progression in question
+    let relevantAwards = awards.filter(aw => (aw.progression == progression));
+    if (relevantAwards.length != 0) {
+        // Sort them by precedence, highest first
+        let sorted = relevantAwards.sort((a, b) =>
+            a.precedence < b.precedence ? 1 : a.precedence == b.precedence ? 0 : -1
+        )
+        // The highest is the one we want to keep
+        let highest = sorted[0];
 
+        // But we want to also keep all the records of all the lower awards
+        let records = sorted.flatMap(award => award.records);
+        highest.records = records;
+
+        // Remove all awards from this progression from the original list
+        awards = awards.filter(aw => aw.progression != progression);
+
+        // Put the highest award back into the list
+        awards.push(highest);
+    }
+    return awards;
 }
