@@ -17,7 +17,7 @@
 
 /* General styling */
 body {
-    font-family: sans-serif;
+    font-family: 'Source Sans Pro', sans-serif;
     background: url(assets/noise.png) repeat, var(--accent-color);
 }
 
@@ -86,6 +86,17 @@ div.loading {
 
 img.loading {
     width: 100px;
+}
+
+/* Refresh indicator */
+
+div.refresh {
+    display: flex;
+    align-items: center;
+}
+
+img.refresh {
+    margin-left: 0.5em;
 }
 
 /* Empty states */

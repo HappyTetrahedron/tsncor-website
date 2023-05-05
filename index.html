@@ -3,6 +3,7 @@
         The New TSN Central Officer Records
     </title>
     <script type="module" src="main.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Source Sans Pro' rel='stylesheet'>
     <link rel="stylesheet" href="layout.css" />
     <link rel="stylesheet" href="style.css" />
 </head>
@@ -29,7 +30,10 @@
                         </a>
                     </li>
                 </ul>
-                <button @click="refreshData">Refresh</button>
+                <div class="refresh">
+                    <button @click="refreshData">Refresh</button>
+                    <img v-if="refreshing" width="15px" class="refresh" src="assets/loading-spinner.gif" />
+                </div>
             </div>
             <div class="tab-content-wrapper">
                 <div v-if="!selectedOfficerObject" class="empty" id="officer-empty">
@@ -125,7 +129,10 @@
                         </a>
                     </li>
                 </ul>
-                <button @click="refreshData">Refresh</button>
+                <div class="refresh">
+                    <button @click="refreshData">Refresh</button>
+                    <img v-if="refreshing" width="15px" class="refresh" src="assets/loading-spinner.gif" />
+                </div>
             </div>
             <div class="tab-content-wrapper">
                 <div v-if="!selectedShipObject" class="empty" id="ship-empty">
@@ -134,26 +141,32 @@
                 </div>
                 <div v-if="selectedShipObject" id="ship-display" class="tab-content">
                     <div class="content-title">
-                        <h2 class="ship-name section-title">TSN {{selectedShipObject.name}} ({{ selectedShipObject.registry }}) </h2>
+                        <h2 class="ship-name section-title">TSN {{selectedShipObject.name}} <span v-if="selectedShipObject.registry">({{ selectedShipObject.registry }})</span> </h2>
                     </div>
                     <div id="basicData">
                         <table class="info-table ship-info">
                             <tr>
                                 <td>
                                     <p class="info-title">Registry:</p>
-                                    <p>{{ selectedShipObject.registry }}</p>
+                                    <div class="long-property-text">
+                                        <p>{{ selectedShipObject.registry }}</p>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                     <p class="info-title">Class:</p>
-                                    <p>{{ selectedShipObject.class }}</p>
+                                    <div class="long-property-text">
+                                        <p>{{ selectedShipObject.class }}</p>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                     <p class="info-title">Status:</p>
-                                    <p>{{ selectedShipObject.status }}</p>
+                                    <div class="long-property-text">
+                                        <p>{{ selectedShipObject.status }}</p>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
