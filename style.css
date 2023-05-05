@@ -42,6 +42,7 @@ button.tab {
     border-radius: 5px 5px 0 0;
     background-color: var(--light-gray);
     border-style: none;
+    cursor: pointer;
 }
 
 button.tab.active {
@@ -60,6 +61,10 @@ a:hover {
 a {
     color: var(--accent-color);
     cursor: pointer;
+}
+
+a.active {
+    color: var(--accent-color-dark);
 }
 
 /* Search bar */
