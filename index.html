@@ -1,8 +1,11 @@
+<!doctype html>
 <head>
-    <title>
-        TSN Central Officer Records
+    <title v-scope>
+        TSN Central Officer Records{{ selectedEntry != "" ? `: ${selectedEntry}` : "" }}
     </title>
+    <meta name="author" content="HappyTetrahedron">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
     <script type="module" src="main.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Source Sans Pro' rel='stylesheet'>
     <link rel="stylesheet" href="layout.css" />

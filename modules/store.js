@@ -217,6 +217,12 @@ export const store = reactive({
     },
 
     /**
+     * This is a comparator for officer objects. It is used to sort lists. 
+     * It decides what order items should be in. In this particular case, we're
+     * comparing officers by their rank and seniority, to figure out who is higher rank.
+     * If item a should be in front of item b, it returns -1. If b should be in front, it returns 1.
+     * If a and b are "the same" (we can't tell which one should be in front), the comparator
+     * has to return 0.
      * 
      * @param {officer} a 
      * @param {officer} b 
@@ -245,7 +251,7 @@ export const store = reactive({
     },
 
     init() {
-        // This will run them all in parallel, which is faster.
+        // This will fetch them all in parallel, which is faster.
         Promise.all([
             Api.fetchOfficerData()
                 .then(o => this.updateOfficers(o))

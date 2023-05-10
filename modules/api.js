@@ -4,12 +4,17 @@
  */
 import * as Config from "../configuration.js"
 
-const cache = await caches.open("tsncor");
+var cache = undefined;
+try {
+    cache = await caches.open("tsncor");
+}
+catch (exception) {}
 
 export async function fetchOfficerData() {
     let officers = await fetchWithCache(Config.TSNCOR_OFFICERS_URL, Config.SHORT_CACHE_DURATION);
     return officers;
 }
+
 
 export async function fetchShipData() {
     let ships = await fetchWithCache(Config.TSNCOR_SHIPS_URL, Config.LONG_CACHE_DURATION);
@@ -22,7 +27,7 @@ export async function fetchAwardData() {
 }
 
 export async function fetchAwardRecordData() {
-    let awardsRecords = await fetchWithCache(Config.TSNCOR_AWARDS_RECORDS_URL, Config.LONG_CACHE_DURATION);
+    let awardsRecords = await fetchWithCache(Config.TSNCOR_AWARDS_RECORDS_URL, Config.SHORT_CACHE_DURATION);
     return awardsRecords;
 }
 
@@ -47,9 +52,14 @@ export async function resetCache() {
 
 async function fetchWithCache(url, cacheDuration) {
     let lastCached = localStorage.getItem(url)
-    if (lastCached < Date.now() - cacheDuration) {
+    if (!cache || lastCached < Date.now() - cacheDuration) {
         let res = await fetch(url, {redirect: "follow"})
-        await cache.put(url, res);
+        if (!!cache) {
+            await cache.put(url, res);
+        }
+        else {
+            return await res.json();
+        }
         localStorage.setItem(url, Date.now())
     }
     let res = await cache.match(url);
