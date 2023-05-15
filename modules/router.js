@@ -1,3 +1,10 @@
+/**
+ * This module contains routing functions. It basically takes care of adding the "?officer=so-and-so" part to the URL (aka the query) when you click on an officer,
+ * and if you're direct-linking to an URL with that query bit already on it, it also takes care of selecting the correct officer accordingly.
+ *
+ * Why is this needed? Because when clicking on an officer, you're not opening a link to a new page. Instead, you're causing the javascript to change
+ * the current page. That does not normally change the URL in the browser's address bar, so we have to do it ourselves.
+ */
 export function setQueryFromStore(store) {
     let uri = window.location.href.split('?')[0];
 
@@ -7,6 +14,7 @@ export function setQueryFromStore(store) {
     }
 
     let query = `?${store.displayTab}=${store.selectedEntry}`
+    // history.pushState updates the URL in the address bar and also makes it so that the back button in the browser works as expected.
     history.pushState(query, "", `${uri}${query}`)
 }
 

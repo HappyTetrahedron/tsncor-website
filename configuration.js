@@ -16,12 +16,12 @@ export const TSNCOR_QUALIFICATIONS_RECORDS_URL = `${TSNCOR_DEPLOYMENT_WEB_APP_UR
 export const TSNCOR_IMAGES_URL = `${TSNCOR_DEPLOYMENT_WEB_APP_URL}?images`
 
 // Time, in milliseconds, for which records that rarely update are cached.
-// These records are basically everything except officers.
+// These records are basically everything except officers and award records.
 // Users can always force a full refresh via the refresh button on the website.
 export const LONG_CACHE_DURATION = 1000 * 60 * 60 * 24 * 7; // 1 week
 
 // Time, in milliseconds, for which records that update more frequently are cached.
-// This is currently just the officer records.
+// This is currently just the officer records and award records.
 // Users can always force a full refresh via the refresh button on the website.
 export const SHORT_CACHE_DURATION = 1000 * 60 * 60; // 1 hour
 
