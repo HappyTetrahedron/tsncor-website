@@ -1,19 +1,18 @@
 // This URL refers to a deployment of the AppsScript code which is contained in the TSNCOR spreadsheet.
 // To find that, open the spreadsheet, then go to Extensions --> AppsScript.
 // The code there contains an explanation of how to get/update this URL.
-const TSNCOR_DEPLOYMENT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyeDkrUHyaVfTBjYge400j-Hz6lxNw5sBlOKhjfTS1lzdeVkQqjL7ZeZROtWyaMmqk/exec"
+// const TSNCOR_DEPLOYMENT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyeDkrUHyaVfTBjYge400j-Hz6lxNw5sBlOKhjfTS1lzdeVkQqjL7ZeZROtWyaMmqk/exec"
 
 
-// The path suffices for these URLs are also defined in the AppsScript.
-export const TSNCOR_OFFICERS_URL = `${TSNCOR_DEPLOYMENT_WEB_APP_URL}?sheet=officers`
-export const TSNCOR_AWARDS_URL = `${TSNCOR_DEPLOYMENT_WEB_APP_URL}?sheet=awards`
-export const TSNCOR_AWARDS_RECORDS_URL = `${TSNCOR_DEPLOYMENT_WEB_APP_URL}?sheet=awardrecords`
-export const TSNCOR_SHIPS_URL = `${TSNCOR_DEPLOYMENT_WEB_APP_URL}?sheet=ships`
-export const TSNCOR_RANKS_URL = `${TSNCOR_DEPLOYMENT_WEB_APP_URL}?sheet=ranks`
-export const TSNCOR_STARDATES_URL = `${TSNCOR_DEPLOYMENT_WEB_APP_URL}?sheet=stardates`
-export const TSNCOR_QUALIFICATIONS_URL = `${TSNCOR_DEPLOYMENT_WEB_APP_URL}?sheet=qualifications`
-export const TSNCOR_QUALIFICATIONS_RECORDS_URL = `${TSNCOR_DEPLOYMENT_WEB_APP_URL}?sheet=qualificationrecords`
-export const TSNCOR_IMAGES_URL = `${TSNCOR_DEPLOYMENT_WEB_APP_URL}?images`
+export const TSNCOR_OFFICERS_URL = "api/appsscript.php?key=sheet&val=officers&max_age=3600";
+export const TSNCOR_AWARDS_URL = "api/appsscript.php?key=sheet&val=awards";
+export const TSNCOR_AWARDS_RECORDS_URL = "api/appsscript.php?key=sheet&val=awardrecords";
+export const TSNCOR_SHIPS_URL = "api/appsscript.php?key=sheet&val=ships";
+export const TSNCOR_RANKS_URL = "api/appsscript.php?key=sheet&val=ranks";
+export const TSNCOR_STARDATES_URL = "api/appsscript.php?key=sheet&val=stardates";
+export const TSNCOR_IMAGES_URL = "api/appsscript.php?key=images&val=true";
+
+export const AWARD_IMAGE_BASE_URL = "api/images.php?key="
 
 // Time, in milliseconds, for which records that rarely update are cached.
 // These records are basically everything except officers and award records.

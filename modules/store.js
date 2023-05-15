@@ -132,7 +132,7 @@ export const store = reactive({
         if (id === undefined) {
             return Config.RIBBON_MISSING_FILE;
         }
-        return `https://drive.google.com/uc?export=view&id=${id}`
+        return `${Config.AWARD_IMAGE_BASE_URL}${id}`
     },
 
     getOfficerRecordByName(name) {

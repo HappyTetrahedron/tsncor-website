@@ -6,8 +6,8 @@ It is based on previous work by @astrolamb-gaming
 
 ## Configuration
 
-Some basic configuration can be done in `configuration.js`, where we just define a few variables that determine the behaviour of the app. 
-If you're here because the COR spreadsheet told you to "update the AppsScript deployment URL in the website", then this is the file you need to look at.
+Some basic configuration can be done in `configuration.js` as well as `api/configuration.php`, where we just define a few variables that determine the behaviour of the app. 
+If you're here because the COR spreadsheet told you to "update the AppsScript deployment URL in the website", then you'll want to check out `api/configuration.php`.
 You'll want to change the `TSNCOR_DEPLOYMENT_WEB_APP_URL` variable.
 
 
@@ -16,7 +16,11 @@ You'll want to change the `TSNCOR_DEPLOYMENT_WEB_APP_URL` variable.
 This is a relatively plain "hand-crafted" website with some HTML and CSS.
 You'll find the main structure in `index.html`, and the biggest part of the logic in `modules/store.js`.
 
-### Logic
+There's a very small bit of logic which runs server-side.
+This you'll find in the `api` directory.
+This part is responsible for caching the spreadsheet data, which is necessary since getting the data from the spreadsheet is quite slow.
+
+### Client
 
 The code uses petite-vue (based on vue.js) to introduce some reactive patterns.
 If this is something you've never heard of, here's the TLDR:
@@ -36,6 +40,12 @@ There are some more cool features. The important ones are:
 * the `v-if` directive can be added to an HTML tag to make this tag only visible if a javascript condition is true
 * the `v-for` directive can be added to an HTML tag. This will make petite-vue repeat the tag once for each item in a javascript list.
 * the `v-bind` directive can be added to inputs (like the search field). This means: "whenever this input field changes, update that javascript variable, and vice versa".
+
+### API (caching)
+
+There are a few PHP files in `api`. These are responsible for server side caching.
+
+TODO: document how it works.
 
 ### Look & Feel
 
