@@ -46,9 +46,21 @@ function fetch_with_cache($remote_url, $local_file, $cache_time_seconds) {
             error_log(curl_error($curl));
             header("Location: {$remote_url}");
             curl_close($curl);
+            fclose($out_file);
+            die();
+        }
+
+        if (curl_getinfo($curl, CURLINFO_RESPONSE_CODE) != 200) {
+            // In this case the request did go through but the response indicates some sort of error.
+            header("Location: {$remote_url}");
+            curl_close($curl);
+            fclose($out_file);
+            // This also means the file we just saved is probably useless, so let's delete it.
+            unlink($file_path);
             die();
         }
         curl_close($curl);
+        fclose($out_file);
     }
 
     // Finally, tell the client where to find the cached file.
