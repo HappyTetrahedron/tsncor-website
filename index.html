@@ -137,7 +137,7 @@
                 </div>
                 <ul>
                     <li v-for="ship in ships">
-                        <a @click="selectShip(ship.name)" :class="{ active: ship.name == selectedShip}" >
+                        <a @click="selectShip(ship.full_name)" :class="{ active: ship.full_name == selectedShip}" >
                             TSN {{ ship.name }}
                         </a>
                     </li>

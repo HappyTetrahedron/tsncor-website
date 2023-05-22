@@ -70,7 +70,7 @@ export const store = reactive({
     },
 
     get selectedShipObject() {
-        return this.getShipByName(this.selectedShip);
+        return this.getShipByFullName(this.selectedShip);
     },
 
     get sortedRanks() {
@@ -172,8 +172,8 @@ export const store = reactive({
         return relevantAwards.sort((a, b) => (a.precedence < b.precedence) ? 1 : (a.precedence === b.precedence) ? 0 : -1)
     },
 
-    getShipByName(name) {
-        let ship = this.ships.find(elem => elem.name == name);
+    getShipByFullName(name) {
+        let ship = this.ships.find(elem => elem.full_name == name);
         if (ship === undefined) {
             return undefined
         }
