@@ -1,7 +1,7 @@
 // This URL refers to a deployment of the AppsScript code which is contained in the TSNCOR spreadsheet.
 // To find that, open the spreadsheet, then go to Extensions --> AppsScript.
 // The code there contains an explanation of how to get/update this URL.
-const TSNCOR_DEPLOYMENT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyeDkrUHyaVfTBjYge400j-Hz6lxNw5sBlOKhjfTS1lzdeVkQqjL7ZeZROtWyaMmqk/exec"
+const TSNCOR_DEPLOYMENT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyMlAdzKF--hZK-3Lki4SZ8mP_kZhgtl6fzfWCUxWKb8BlOnIteVPN1rHM16Mz33JQ/exec"
 
 
 // The path suffices for these URLs are also defined in the AppsScript.
