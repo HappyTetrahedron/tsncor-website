@@ -26,6 +26,11 @@ export async function fetchAwardData() {
     return awards;
 }
 
+export async function fetchAssignmentRecordData() {
+    let assignmentRecords = await fetchWithCache(Config.TSNCOR_ASSIGNMENTS_RECORDS_URL, Config.SHORT_CACHE_DURATION);
+    return assignmentRecords;
+}
+
 export async function fetchAwardRecordData() {
     let awardsRecords = await fetchWithCache(Config.TSNCOR_AWARDS_RECORDS_URL, Config.SHORT_CACHE_DURATION);
     return awardsRecords;

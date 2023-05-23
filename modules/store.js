@@ -23,6 +23,7 @@ export const store = reactive({
     awardsRecords: [],
     ranks: [],
     stardates: [],
+    assignmentRecords: [],
     awardImages: {},
 
     refreshing: false,
@@ -89,6 +90,9 @@ export const store = reactive({
     updateAwardsRecords(awardsRecords) {
         this.awardsRecords = awardsRecords;
     },
+    updateAssignmentRecords(assignmentRecords) {
+        this.assignmentRecords = assignmentRecords;
+    },
     updateRanks(ranks) {
         this.ranks = ranks;
     },
@@ -136,11 +140,26 @@ export const store = reactive({
     },
 
     getOfficerRecordByName(name) {
-        let officer = this.officers.find(elem => elem.name == name);
+        let officer = this.getSparseOfficerRecordByName(name);
         if (officer === undefined) {
             return undefined
         }
-        officer.awards = this.getAwardsForOfficer(name);
+        // We can't directly modify the officer object we just filtered out of the list.
+        // Since that is tracked by petite-vue, it will trigger an update of itself, which causes an error.
+        // Instead, we copy the officer data into a new object, and then add more data in there.
+        let fullRecord = {}
+        Object.assign(fullRecord, officer)
+        Object.assign(fullRecord, {
+            assignments: this.getAssignmentsForOfficer(name),
+            awards: this.getAwardsForOfficer(name),
+        })
+        return fullRecord;
+    },
+
+    getSparseOfficerRecordByName(name) {
+        // This returns just the plain officer data without any extra information added in.
+        // If the extra information is not needed, this one is more performant.
+        let officer = this.officers.find(elem => elem.name == name);
         return officer;
     },
 
@@ -172,13 +191,34 @@ export const store = reactive({
         return relevantAwards.sort((a, b) => (a.precedence < b.precedence) ? 1 : (a.precedence === b.precedence) ? 0 : -1)
     },
 
+    getAssignmentsForOfficer(officerName) {
+        let records = this.assignmentRecords
+            .filter(elem => elem.officer == officerName);
+        return records;
+    },
+
+    getPreviousAssignmentsForShip(shipFullName) {
+        let records = this.assignmentRecords
+            .filter(elem => elem.ship == shipFullName)
+            .filter(elem => elem.end_of_assignment != "");
+        return records;
+    },
+
     getShipByFullName(name) {
         let ship = this.ships.find(elem => elem.full_name == name);
         if (ship === undefined) {
             return undefined
         }
-        ship.assigned_officers = this.getOfficersForShip(name);
-        return ship;
+        // We can't directly modify the ship object we just filtered out of the list.
+        // Since that is tracked by petite-vue, it will trigger an update of itself, which causes an error.
+        // Instead, we copy the ship data into a new object, and then add more data in there.
+        let fullShipRecord = {}
+        Object.assign(fullShipRecord, ship)
+        Object.assign(fullShipRecord, {
+            previous_officers: this.getPreviousAssignmentsForShip(name),
+            assigned_officers: this.getOfficersForShip(name),
+        })
+        return fullShipRecord;
     },
 
     getOfficersForShip(shipName) {
@@ -261,7 +301,8 @@ export const store = reactive({
                 .then(() => {this.shipsLoading = false}),
             Api.fetchAwardData().then(a => this.updateAwards(a)),
             Api.fetchAwardRecordData().then(a => this.updateAwardsRecords(a)), 
-            Api.fetchRankData().then(r => this.updateRanks(r)), 
+            Api.fetchAssignmentRecordData().then(a => this.updateAssignmentRecords(a)),
+            Api.fetchRankData().then(r => this.updateRanks(r)),
             Api.fetchStardateData().then(r => this.updateStardates(r)),
             Api.fetchAwardImages().then(r => this.updateAwardImages(r)),
         ])

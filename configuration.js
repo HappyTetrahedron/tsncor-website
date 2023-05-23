@@ -13,6 +13,7 @@ export const TSNCOR_RANKS_URL = `${TSNCOR_DEPLOYMENT_WEB_APP_URL}?sheet=ranks`
 export const TSNCOR_STARDATES_URL = `${TSNCOR_DEPLOYMENT_WEB_APP_URL}?sheet=stardates`
 export const TSNCOR_QUALIFICATIONS_URL = `${TSNCOR_DEPLOYMENT_WEB_APP_URL}?sheet=qualifications`
 export const TSNCOR_QUALIFICATIONS_RECORDS_URL = `${TSNCOR_DEPLOYMENT_WEB_APP_URL}?sheet=qualificationrecords`
+export const TSNCOR_ASSIGNMENTS_RECORDS_URL = `${TSNCOR_DEPLOYMENT_WEB_APP_URL}?sheet=assignmentrecords`
 export const TSNCOR_IMAGES_URL = `${TSNCOR_DEPLOYMENT_WEB_APP_URL}?images`
 
 // Time, in milliseconds, for which records that rarely update are cached.

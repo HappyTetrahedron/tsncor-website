@@ -92,6 +92,16 @@
                             </tr>
                         </table>
                     </div>
+                    <div id="previous-assignments" v-if="selectedOfficerObject.assignments.length > 1">
+                        <h4>Previous assignments:</h4>
+                        <ul class="crew-list">
+                            <li class="crew-entry" v-for="assignment in selectedOfficerObject.assignments">
+                                <a class="internal-link" @click="selectShip(assignment.ship)">
+                                    TSN {{ assignment.ship }} <span v-if="assignment.station != ''">({{ assignment.station }})</span>: {{ formatDate(assignment.start_of_assignment) }} - {{ formatDate(assignment.end_of_assignment) }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                     <div id="awards">
                         <h3 class="section-title">Ribbon Rack</h3>
                         <div id="ribbonrack">
@@ -192,12 +202,22 @@
                             </tr>
                         </table>
                     </div>
-                    <div id="crew">
+                    <div id="crew" v-if="selectedShipObject.assigned_officers.length > 0">
                         <h4>Assigned officers:</h4>
                         <ul class="crew-list">
                             <li class="crew-entry" v-for="officer in selectedShipObject.assigned_officers">
                                 <a class="internal-link" @click="selectOfficer(officer.name)">
-                                    {{ officer.rank }} {{ officer.name }}
+                                    {{ officer.rank }} {{ officer.name }} ({{ officer.station }})
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div id="previous-crew" v-if="selectedShipObject.previous_officers.length > 0">
+                        <h4>Previously assigned officers:</h4>
+                        <ul class="crew-list">
+                            <li class="crew-entry" v-for="assignment in selectedShipObject.previous_officers">
+                                <a class="internal-link" @click="selectOfficer(assignment.officer)">
+                                    {{ getSparseOfficerRecordByName(assignment.officer).rank }} {{ assignment.officer }} <span v-if="assignment.station != ''">({{ assignment.station }})</span>: {{ formatDate(assignment.start_of_assignment) }} - {{ formatDate(assignment.end_of_assignment) }}
                                 </a>
                             </li>
                         </ul>
