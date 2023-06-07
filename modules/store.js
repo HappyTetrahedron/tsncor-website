@@ -274,8 +274,8 @@ export const store = reactive({
         if (rankA < rankB) return -1;
         if (rankA > rankB) return 1;
 
-        let senA = a.seniority
-        let senB = b.seniority
+        let senA = new Date(a.seniority)
+        let senB = new Date(b.seniority)
         // seniority is a date. an *earlier* date means the officer is *more senior*.
         if (senA > senB) return -1;
         if (senA < senB) return 1;
