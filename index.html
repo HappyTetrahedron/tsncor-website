@@ -10,6 +10,7 @@
     <link href='https://fonts.googleapis.com/css?family=Source Sans Pro' rel='stylesheet'>
     <link rel="stylesheet" href="layout.css" />
     <link rel="stylesheet" href="style.css" />
+    <link rel="icon" type="image/x-icon" href="assets/personnel.png">
 </head>
 <body>
     <!-- The v-scope directive causes this entire div to be managed by petite-vue. This makes the templating work, as well as enabling a bunch of other similar directives like v-for, v-model, etc. -->
@@ -17,27 +18,39 @@
         <button class="tab" :class="{ active: displayTab == 'officers'}" @click="showOfficers">Officers</button>
         <button class="tab" :class="{ active: displayTab == 'ships'}" @click="showShips">Ships</button>
         <div v-if="displayTab == 'officers'" id="officers" class="tab-pane">
-            <div id="officer-search" class="tab-sidebar">
-                <div class="search">
-                    <input class="search" v-model="officerSearch" />
-                    <div class="small-option">
-                        <input class="small-option" type="checkbox" v-model="showInactive" /><label class="small-option">Show inactive</label>
+            <div id="officer-search" class="tab-sidebar" :class="{
+                visible: showSidebar,
+            }">
+                <div class="tab-sidebar-inner">
+                    <div class="search">
+                        <input class="search" v-model="officerSearch" />
+                        <div class="small-option">
+                            <input class="small-option" type="checkbox" v-model="showInactive" /><label class="small-option">Show inactive</label>
+                        </div>
+                    </div>
+                    <div class="loading" v-if="officers.length === 0">
+                        <img class="loading" src="assets/loading.gif" />
+                    </div>
+                    <ul>
+                        <li v-for="officer in filteredOfficers">
+                            <a @click="selectOfficer(officer.name)" :class="{ active: officer.name == selectedOfficer}" >
+                                {{ getShortRank(officer.rank) }} {{ officer.name }}
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="refresh">
+                        <button @click="refreshData">Refresh</button>
+                        <img v-if="refreshing" width="15px" class="refresh" src="assets/loading-spinner.gif" />
+                        <div class="small-option">
+                            <input class="small-option" type="checkbox" v-model="useStardates" /><label class="small-option">Use stardates</label>
+                        </div>
                     </div>
                 </div>
-                <div class="loading" v-if="officers.length === 0">
-                    <img class="loading" src="assets/loading.gif" />
-                </div>
-                <ul>
-                    <li v-for="officer in filteredOfficers">
-                        <a @click="selectOfficer(officer.name)" :class="{ active: officer.name == selectedOfficer}" >
-                            {{ getShortRank(officer.rank) }} {{ officer.name }}
-                        </a>
-                    </li>
-                </ul>
-                <div class="refresh">
-                    <button @click="refreshData">Refresh</button>
-                    <img v-if="refreshing" width="15px" class="refresh" src="assets/loading-spinner.gif" />
-                </div>
+            </div>
+            <div class="sidebar-toggle" :class="{
+            sidebarvisible: showSidebar,
+        }">
+                <button class="sidebar-toggle" @click="toggleSidebar()" >{{ showSidebar ? "&laquo;" : "&raquo;" }}</button>
             </div>
             <div class="tab-content-wrapper">
                 <div v-if="!selectedOfficerObject" class="empty" id="officer-empty">
@@ -141,21 +154,33 @@
             </div>
         </div>
         <div v-if="displayTab == 'ships'" id="ships" class="tab-pane">
-            <div id="ship-search" class="tab-sidebar">
-                <div class="loading" v-if="ships.length === 0">
-                    <img class="loading" src="assets/loading.gif" />
+            <div id="ship-search" class="tab-sidebar" :class="{
+                visible: showSidebar,
+            }">
+                <div class="tab-sidebar-inner">
+                    <div class="loading" v-if="ships.length === 0">
+                        <img class="loading" src="assets/loading.gif" />
+                    </div>
+                    <ul>
+                        <li v-for="ship in ships">
+                            <a @click="selectShip(ship.full_name)" :class="{ active: ship.full_name == selectedShip}" >
+                                TSN {{ ship.name }}
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="refresh">
+                        <button @click="refreshData">Refresh</button>
+                        <img v-if="refreshing" width="15px" class="refresh" src="assets/loading-spinner.gif" />
+                        <div class="small-option">
+                            <input class="small-option" type="checkbox" v-model="useStardates" /><label class="small-option">Use stardates</label>
+                        </div>
+                    </div>
                 </div>
-                <ul>
-                    <li v-for="ship in ships">
-                        <a @click="selectShip(ship.full_name)" :class="{ active: ship.full_name == selectedShip}" >
-                            TSN {{ ship.name }}
-                        </a>
-                    </li>
-                </ul>
-                <div class="refresh">
-                    <button @click="refreshData">Refresh</button>
-                    <img v-if="refreshing" width="15px" class="refresh" src="assets/loading-spinner.gif" />
-                </div>
+            </div>
+            <div class="sidebar-toggle" :class="{
+            sidebarvisible: showSidebar,
+        }">
+                <button class="sidebar-toggle" @click="toggleSidebar()" >{{ showSidebar ? "&laquo;" : "&raquo;" }}</button>
             </div>
             <div class="tab-content-wrapper">
                 <div v-if="!selectedShipObject" class="empty" id="ship-empty">

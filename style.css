@@ -5,9 +5,9 @@
 
 :root {
     /* --accent-color: #74cacf; */
-    --accent-color: #579598;
-    --accent-color-light: #c5dbde;
-    --accent-color-dark: #2b4f56;
+    --accent-color: #3b7b99;
+    --accent-color-light: #a3c8d4;
+    --accent-color-dark: #23364a;
 
     --main-background-color: white;
 
@@ -33,6 +33,13 @@ div.tab-pane {
     padding-right: 1em;
     padding-bottom: 2em;
     border-radius: 0 5px 5px 5px;
+}
+
+button.sidebar-toggle {
+    color: var(--light-gray);
+    border: none;
+    border-radius: 3px;
+    background: var(--accent-color);
 }
 
 /* Tabs */

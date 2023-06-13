@@ -36,6 +36,9 @@ export const store = reactive({
     selectedShip: "",
     shipsLoading: true,
 
+    useStardates: true,
+    showSidebar: true,
+
     displayTab: "officers",
 
     get selectedEntry() {
@@ -105,10 +108,20 @@ export const store = reactive({
 
     showOfficers() {
         this.displayTab = "officers";
+        // Force showing the sidebar if no officer is selected
+        // Otherwise the user just gets a confusing blank page
+        if (this.selectedOfficer == "") {
+            this.showSidebar = true;
+        }
     },
 
     showShips() {
         this.displayTab = "ships";
+        // Force showing the sidebar if no ship is selected
+        // Otherwise the user just gets a confusing blank page
+        if (this.selectedShip == "") {
+            this.showSidebar = true;
+        }
     },
 
     selectOfficer(officerName) {
@@ -234,8 +247,13 @@ export const store = reactive({
         if (isNaN(date)) { // this means it wasn't a valid date. Happens sometimes when people put "???" into the spreadsheet.
             return dateString; // In that case, leave it as-is.
         }
+
         // JavaScript months are 0-based, meaning January is month 0, so we add 1 to the month.
-        return `${date.getDate()}${(date.getMonth()+1)}${(date.getFullYear()-2000)}-${this.getStarYearForDate(date)}`;
+        if (this.useStardates) {
+            return `${date.getDate()}${(date.getMonth()+1)}${(date.getFullYear()-2000)}-${this.getStarYearForDate(date)}`;
+        }
+
+        return date.getDate() + "/" + (date.getMonth()+1)+ "/" + (date.getFullYear()-2000);
     },
 
     getStarYearForDate(date) {
@@ -248,6 +266,10 @@ export const store = reactive({
             .sort((a, b) => a.stardate_year < b.stardate_year ? 1 : a.stardate_year === b.stardate_year ? 0 : -1); // sort highest first
 
         return filteredStardates[0].stardate_year; // get the first (highest) and return it
+    },
+
+    toggleSidebar() {
+        this.showSidebar = !this.showSidebar;
     },
 
     officerHasRank(officer, rank) {
