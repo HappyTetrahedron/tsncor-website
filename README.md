@@ -4,6 +4,8 @@ This repository contains the code for the website displaying the TSN COR.
 
 It is based on previous work by @astrolamb-gaming
 
+Work on this codebase is continued in https://github.com/tsnrp/tsncor-website -- this repository is archived.
+
 ## Configuration
 
 Some basic configuration can be done in `configuration.js`, where we just define a few variables that determine the behaviour of the app. 
